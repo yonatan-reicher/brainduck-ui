@@ -1,0 +1,14 @@
+{
+  "name": "brainduck-ui",
+  "collaborators": [
+    "Yonatan Reicher"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "brainduck_ui_bg.wasm",
+    "brainduck_ui.js",
+    "brainduck_ui.d.ts"
+  ],
+  "browser": "brainduck_ui.js",
+  "types": "brainduck_ui.d.ts"
+}
