@@ -83,6 +83,10 @@ impl Interpreter {
         self.deref_mut().back()
     }
 
+    pub fn step_over(&mut self) {
+        self.deref_mut().step_over()
+    }
+
     pub fn reset(&mut self) {
         self.deref_mut().reset();
     }

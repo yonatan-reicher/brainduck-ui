@@ -37,6 +37,7 @@ type Msg
     = CodeChanged String
     | Step
     | Back
+    | StepOver
     | Reset
     | Edit
     | Run
@@ -265,6 +266,10 @@ viewCommandsButtons model =
                 ]
                 [ text "Step" ]
             , button
+                [ onClick StepOver
+                ]
+                [ text "Step Over" ]
+            , button
                 [ onClick Back
                 ]
                 [ text "Back" ]
@@ -288,6 +293,9 @@ update msg model =
 
         Step ->
             ( model, Interpreter.step() )
+
+        StepOver ->
+            ( model, Interpreter.stepOver() )
 
         Back ->
             ( model, Interpreter.back() )

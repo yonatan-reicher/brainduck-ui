@@ -71,6 +71,11 @@
             interpreter.back();
             afterStateChanged();
         });
+        app.ports.stepOver.subscribe(async () => {
+            await loadWasm;
+            interpreter.step_over();
+            afterStateChanged();
+        });
         app.ports.reset.subscribe(async () => {
             await loadWasm;
             interpreter.reset();

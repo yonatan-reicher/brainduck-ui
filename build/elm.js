@@ -5311,6 +5311,11 @@ var $author$project$Interpreter$step = _Platform_outgoingPort(
 	function ($) {
 		return $elm$json$Json$Encode$null;
 	});
+var $author$project$Interpreter$stepOver = _Platform_outgoingPort(
+	'stepOver',
+	function ($) {
+		return $elm$json$Json$Encode$null;
+	});
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -5325,6 +5330,10 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					model,
 					$author$project$Interpreter$step(_Utils_Tuple0));
+			case 'StepOver':
+				return _Utils_Tuple2(
+					model,
+					$author$project$Interpreter$stepOver(_Utils_Tuple0));
 			case 'Back':
 				return _Utils_Tuple2(
 					model,
@@ -8276,6 +8285,7 @@ var $author$project$Main$Edit = {$: 'Edit'};
 var $author$project$Main$Reset = {$: 'Reset'};
 var $author$project$Main$Run = {$: 'Run'};
 var $author$project$Main$Step = {$: 'Step'};
+var $author$project$Main$StepOver = {$: 'StepOver'};
 var $rtfeldman$elm_css$Html$Styled$button = $rtfeldman$elm_css$Html$Styled$node('button');
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 'Normal', a: a};
@@ -8321,6 +8331,16 @@ var $author$project$Main$viewCommandsButtons = function (model) {
 				_List_fromArray(
 					[
 						$rtfeldman$elm_css$Html$Styled$text('Step')
+					])),
+				A2(
+				$rtfeldman$elm_css$Html$Styled$button,
+				_List_fromArray(
+					[
+						$rtfeldman$elm_css$Html$Styled$Events$onClick($author$project$Main$StepOver)
+					]),
+				_List_fromArray(
+					[
+						$rtfeldman$elm_css$Html$Styled$text('Step Over')
 					])),
 				A2(
 				$rtfeldman$elm_css$Html$Styled$button,

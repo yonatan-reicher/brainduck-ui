@@ -1,6 +1,7 @@
 port module Interpreter exposing
     ( reset, step, back, setCode, setCodeFinished, stateUpdated
     , setMemoryViewSize, inputRequested, output, undoOutput, clearOutput
+    , stepOver
     )
 
 
@@ -41,3 +42,6 @@ port clearOutput : (() -> msg) -> Sub msg
 
 
 port back : () -> Cmd msg
+
+
+port stepOver : () -> Cmd msg
