@@ -1,0 +1,110 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <title>Brainduck</title>
+    <meta charset="utf-8">
+    <!-- Load the brainduck bindings -->
+    <script src="./pkg/brainduck_ui.js"></script>
+    <!-- Load the elm generated javascript -->
+    <script src="build/elm.js"></script>
+    <!-- Make the body fill the screen -->
+    <!-- Load JetBrains Mono font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+        // Import the wasm bindings
+        const { Interpreter } = wasm_bindgen;
+
+        // Implement the wasm_bindgen interface
+        function on_input() {
+            app.ports.input.send(null);
+            // TODO: Change this
+            return 7;
+        }
+
+        function on_output(ch) {
+            app.ports.output.send(ch);
+        }
+
+        function on_undo_output() {
+            app.ports.undoOutput.send(null);
+        }
+
+        function on_clear_output() {
+            app.ports.clearOutput.send(null);
+        }
+
+        // Initialize the wasm module
+        var wasmLoadDone = false;
+        var wasmLoadSuccess = false;
+        const loadWasm = wasm_bindgen()
+            .then(() => {
+                interpreter = new Interpreter("");
+                wasmLoadSuccess = true;
+            })
+            .catch(console.error)
+            .finally(() => {
+                wasmLoadDone = true;
+            });
+
+        var interpreter = null;
+        var memoryViewSize = 0;
+
+        const app = Elm.Main.init({});
+        app.ports.step.subscribe(async () => {
+            await loadWasm;
+            interpreter.step();
+            afterStateChanged();
+        });
+        app.ports.back.subscribe(async () => {
+            await loadWasm;
+            interpreter.back();
+            afterStateChanged();
+        });
+        app.ports.reset.subscribe(async () => {
+            await loadWasm;
+            interpreter.reset();
+            afterStateChanged();
+        });
+        app.ports.setCode.subscribe(async code => {
+            await loadWasm;
+            // TODO: Simplify this
+            let success = false;
+            try {
+                if (!wasmLoadSuccess) {
+                    throw "Interpreter not loaded yet";
+                }
+                interpreter = new Interpreter(code);
+                success = true;
+                afterStateChanged();
+            } catch (e) {
+                console.error(e);
+            } finally {
+                app.ports.setCodeFinished.send(success);
+            }
+        });
+        app.ports.setMemoryViewSize.subscribe(async size => {
+            await loadWasm;
+            memoryViewSize = size;
+            afterStateChanged();
+        });
+
+        function afterStateChanged() {
+            app.ports.stateUpdated.send({
+                pc: interpreter.pc(),
+                memoryView: Array.from(interpreter.memory_view(memoryViewSize)),
+            });
+        }
+    </script>
+</body>
+</html> 
